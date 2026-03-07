@@ -1,0 +1,15 @@
+1. Get the Gateway URL by running these commands:
+{{- if contains "NodePort" .Values.gateway.service.type }}
+  export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "kos.fullname" . }}-gateway)
+  export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+  echo http://$NODE_IP:$NODE_PORT
+{{- else if contains "ClusterIP" .Values.gateway.service.type }}
+  echo "Visit http://127.0.0.1:8080 to use your Gateway"
+  kubectl --namespace {{ .Release.Namespace }} port-forward svc/{{ include "kos.fullname" . }}-gateway 8080:{{ .Values.gateway.service.port }}
+{{- end }}
+
+2. Check your Storage Nodes:
+  kubectl get pods -l app=kos-node
+
+3. Check your Metadata DB:
+  kubectl get pods -l app.kubernetes.io/name=postgresql

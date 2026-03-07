@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "kos.fullname" . }}-node
+spec:
+  serviceName: {{ include "kos.fullname" . }}-node-headless
+  replicas: {{ .Values.node.replicaCount }}
+  selector:
+    matchLabels:
+      app: kos-node
+  template:
+    metadata:
+      labels:
+        app: kos-node
+    spec:
+      containers:
+        - name: node
+          image: "{{ .Values.node.image.repository }}:{{ .Values.node.image.tag }}"
+          command: ["sleep", "infinity"]
+          volumeMounts:
+            - name: data
+              mountPath: /data
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: {{ .Values.node.persistence.accessModes | toYaml | nindent 10 }}
+        storageClassName: {{ .Values.node.persistence.storageClass | quote }}
+        resources:
+          requests:
+            storage: {{ .Values.node.persistence.size }}

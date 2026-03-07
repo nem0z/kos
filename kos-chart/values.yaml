@@ -1,0 +1,31 @@
+gateway:
+  image:
+    repository: busybox
+    tag: latest
+  replicaCount: 2
+  service:
+    type: ClusterIP
+    port: 80
+
+node:
+  image:
+    repository: busybox
+    tag: latest
+  replicaCount: 3
+  persistence:
+    storageClass: standard
+    size: 1Gi
+    accessModes:
+      - ReadWriteOnce
+
+postgresql:
+  enabled: true
+  image:
+    tag: latest
+  primary:
+    persistence:
+      storageClass: standard
+  auth:
+    database: kos_metadata
+    username: kos_user
+    password: kos_password
