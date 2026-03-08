@@ -1,6 +1,6 @@
 gateway:
   image:
-    repository: busybox
+    repository: mem0z/kos-gateway
     tag: latest
   replicaCount: 2
   service:
@@ -9,7 +9,7 @@ gateway:
 
 node:
   image:
-    repository: busybox
+    repository: mem0z/kos-node
     tag: latest
   replicaCount: 3
   persistence:
@@ -18,14 +18,15 @@ node:
     accessModes:
       - ReadWriteOnce
 
-postgresql:
+valkey:
   enabled: true
+  architecture: standalone
   image:
-    tag: latest
-  primary:
-    persistence:
-      storageClass: standard
+    tag: "latest"
+    pullPolicy: Always
+  persistence:
+    enabled: true
+    storageClass: "standard"
+    size: 1Gi
   auth:
-    database: kos_metadata
-    username: kos_user
-    password: kos_password
+    enabled: false    

@@ -10,6 +10,3 @@
 
 2. Check your Storage Nodes:
   kubectl get pods -l app=kos-node
-
-3. Check your Metadata DB:
-  kubectl get pods -l app.kubernetes.io/name=postgresql

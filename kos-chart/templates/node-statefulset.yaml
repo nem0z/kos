@@ -16,7 +16,6 @@ spec:
       containers:
         - name: node
           image: "{{ .Values.node.image.repository }}:{{ .Values.node.image.tag }}"
-          command: ["sleep", "infinity"]
           volumeMounts:
             - name: data
               mountPath: /data

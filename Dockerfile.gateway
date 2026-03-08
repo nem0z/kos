@@ -1,0 +1,9 @@
+# gateway/Dockerfile
+FROM golang:1.25 AS builder
+WORKDIR /app
+COPY . .
+RUN GOOS=linux GOARCH=arm64 go build -o gateway ./kos/cmd/gateway/main.go
+
+FROM scratch
+COPY --from=builder /app/gateway .
+ENTRYPOINT ["./gateway"]
